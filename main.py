@@ -1,9 +1,9 @@
 import nmap
 import json
 import subprocess
+import re
 from loguru import logger
 import pandas as pd
-import re
 
 rac_client = "./rac_binaries/8.3.18.1741/rac"
 ras_targets = []
@@ -34,14 +34,14 @@ def split_srv(s: str, splitter=":"):
             for i in s.split("\n")
                 if splitter in i}
 
-def split_info(s: str, splitter=":"):
+def split_re(s: str, pattern, splitter=":"):
     res = []
     for i_s in s.split('\n\n'):
         res.append({i.split(splitter)[0].strip():
                     i.split(splitter)[1].strip()
                     for i in i_s.split("\n")
                         if splitter in i
-                            if re.search(r'(client-ip\s|infobase\s|started-at\s|last-active-at\s|host\s|user-name\s|app-id\s)', i)})    # Добавление данных в список, при соответствии паттерна
+                            if re.search(pattern, i)})    # Добавление данных в список, при соответствии паттерна
     return res
 
 def ras_exec(re_command):
@@ -67,9 +67,15 @@ try:
         ras_uuid=(finded_clusters["cluster"])
         ras_host=(finded_clusters["host"])
 
-        logger.info("Начало сбора информации из Консоли Кластера "+ras_host)
+        logger.info("Начало сбора информации по информационным базам из Консоли Кластера "+ras_host)
+        infobases = ras_exec("infobase summary list --cluster="+ras_uuid+" "+ras_connect+" "+ras_target)    # Получаем список информационных баз кластера
+        split_infobases = (split_re(infobases,r'(infobase|name)'))
+
+        logger.info("Начало сбора информации по сессиям из Консоли Кластера "+ras_host)
         sessions = ras_exec("session list --cluster="+ras_uuid+" "+ras_connect+" "+ras_target)  #   Запуск rac для сбора информации по сессиям
-        split_sessions = (split_info(sessions))
+        split_sessions = (split_re(sessions,r'(infobase\s|user-name\s|host\s|app-id\s|started-at\s|last-active-at\s|client-ip\s)'))
+
+        logger.info("Создание .csv файла "+ras_host)
         csv_name = ras_host+".csv"
         df = pd.DataFrame(split_sessions)
         check_df = df.head(1)                                               #    Чтение первой строки в DataFrame
