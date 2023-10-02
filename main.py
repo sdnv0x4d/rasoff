@@ -1,24 +1,44 @@
+#!/usr/bin/env python3
+
 import nmap
 import json
 import subprocess
 import re
+import argparse
 from loguru import logger
 import pandas as pd
 
-rac_client = "./rac_binaries/8.3.18.1741/rac"
+parser = argparse.ArgumentParser(description="1C RAS Offensive Security Tool")
+parser.add_argument("-b", "--bin", type=str, default="./rac_binaries/8.3.18.1741/rac", help="Путь до исполняемого файла rac", required=True)
+parser.add_argument("-r", "--range", type=str, help="Диапазоны сетей/адреса хостов для сканирования через пробел")
+parser.add_argument("-u", "--username", type=str, help="Имя Пользователя кластера 1С")
+parser.add_argument("-p", "--password", type=str, help="Пароль Пользователя кластера 1С")
+parser.add_argument("-n", "--nmap", action="extend", nargs="+", help="Доп. Аргументы для nmap")
+#parser.add_argument("-ss", "--skip-scan", type=str, help="Указание хостов пропуская сканирование nmap, через пробел")
+args = parser.parse_args()
+
+rac_client = args.bin
+targets = args.range
+username = args.username
+password = args.password
 ras_targets = []
 ras_uuid = []
 ras_host = []
 ras_port = ":1545"
 
-ras_connect = str("")
-targets = str(input("Введите через пробел диапазоны сетей/адреса хостов для сканирования: "))
+if username is not None:
+    ras_connect = str(f"--cluster-user={username} ")
+    if password is not None:
+        ras_connect += str(f"--cluster-pwd=\"{password}\" ")
+
+if targets is None:
+    targets = str(input("Введите через пробел диапазоны сетей/адреса хостов для сканирования: "))
 
 def nmap_1c():
     logger.info("Начало сканирования Консолей Кластера 1С в диапазоне "+targets)
     try:
         nm = nmap.PortScanner()
-        outnm = nm.scan(hosts=targets, arguments='--open -n', ports='1545')     #   Сканирование указанных IP на 1545 порту
+        outnm = nm.scan(hosts=targets, arguments='--open -n {args.nmap} ', ports='1545')     #   Сканирование указанных IP на 1545 порту
         out_str = json.dumps(outnm)
         out_dict = json.loads(out_str)
         ras_targets.extend(out_dict['scan'])
@@ -66,7 +86,7 @@ def change_uuid_to_infobase_name(sessions_copy, infobases_name=None):
         for base in infobases_name:
             if base.get('infobase') == session.get('infobase') and base.get('infobase') is not None:
                 session['infobase'] = base['name']
-
+                
 nmap_1c()
 
 try:
