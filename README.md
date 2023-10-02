@@ -7,7 +7,11 @@
 ## Установка
 `git clone https://github.com/sdnv0x4d/rasoff.git`
 
-Установка зависимостей: `pip3 install -r req.txt`
+Установка зависимостей:
+```bash
+apt install nmap
+pip3 install -r req.txt
+`
 
 Запуск скрипта с указанием пути до утилиты `rac`: 
 ```bash
