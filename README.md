@@ -7,7 +7,7 @@
 ## Установка
 `git clone https://github.com/sdnv0x4d/rasoff.git`
 
-Установка зависимостей: `pip install req.txt`
+Установка зависимостей: `pip3 install -r req.txt`
 
 Запуск скрипта с указанием пути до утилиты `rac`: 
 ```bash
