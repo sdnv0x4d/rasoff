@@ -11,7 +11,7 @@
 ```bash
 apt install nmap
 pip3 install -r req.txt
-`
+```
 
 Запуск скрипта с указанием пути до утилиты `rac`: 
 ```bash
