@@ -11,7 +11,7 @@
 
 Запуск скрипта с указанием пути до утилиты `rac`: 
 ```bash
-python main.py -u admin -p "p@$$w0rD" -b /opt/1cv8/x86_64/8.3.18.1741/rac -r 10.0.0.0.24 -n "--max-rate 10"
+python main.py -u admin -p "p@$$w0rD" -b /opt/1cv8/x86_64/8.3.18.1741/rac -r 10.0.0.0/24 -n "--max-rate 10"
 ```
 
 ## Использование
