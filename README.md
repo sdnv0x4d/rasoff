@@ -43,7 +43,7 @@ python3 main.py -u admin -p "p@$$w0rD" -b /opt/1cv8/x86_64/8.3.18.1741/rac -r 10
 > 
 > Согласно лицензионному соглашению, распространение серверных утилит 1С запрещено.
 > 
-> Официальный ресурс с диструбутивами [releases.1c.ru](https://releases.1c.ru/project/Platform83)
+> Официальный ресурс с дистрибутивами [releases.1c.ru](https://releases.1c.ru/project/Platform83)
 
 ### Данные
 Данные, которые получаем на выходе:
