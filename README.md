@@ -55,6 +55,11 @@ python3 main.py -u admin -p "p@$$w0rD" -b /opt/1cv8/x86_64/8.3.18.1741/rac -r 10
 - Последняя активность
 - IP-адрес клиента
 
+> **P.S.**
+> Спасибо товарищу и другу за помощь с функциями парсинга и обработки выходных данных 
+>
+> https://github.com/Rewale
+
 ## Лицензия
 
 Licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html) License.
