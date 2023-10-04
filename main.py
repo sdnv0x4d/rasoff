@@ -9,7 +9,7 @@ from loguru import logger
 import pandas as pd
 
 parser = argparse.ArgumentParser(description="1C RAS Offensive Security Tool")
-parser.add_argument("-b", "--bin", type=str, default="./rac_binaries/8.3.18.1741/rac", help="Путь до исполняемого файла rac", required=True)
+parser.add_argument("-b", "--bin", type=str, default="./rac_binaries/8.3.18.1741/rac", help="Путь до исполняемого файла rac")
 parser.add_argument("-r", "--range", type=str, help="Диапазоны сетей/адреса хостов для сканирования через пробел")
 parser.add_argument("-u", "--username", type=str, help="Имя Пользователя кластера 1С")
 parser.add_argument("-p", "--password", type=str, help="Пароль Пользователя кластера 1С")
@@ -45,7 +45,7 @@ def nmap_1c():
         if len(ras_targets) == 0:
             logger.error("Консоль Кластера 1С на стандартном порту 1545 в диапазоне "+targets+" не найден, выход...")
             exit()
-    except Exception as e: 
+    except Exception as e:
         logger.error(str(e))
 
 def split_srv(s: str, splitter=":"):
@@ -86,7 +86,7 @@ def change_uuid_to_infobase_name(sessions_copy, infobases_name=None):
         for base in infobases_name:
             if base.get('infobase') == session.get('infobase') and base.get('infobase') is not None:
                 session['infobase'] = base['name']
-                
+
 nmap_1c()
 
 try:
